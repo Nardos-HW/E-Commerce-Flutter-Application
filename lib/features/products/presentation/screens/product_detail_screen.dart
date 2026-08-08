@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../core/widgets/state_widgets.dart';
 import '../providers/product_providers.dart';
+import '../../../cart/presentation/providers/cart_providers.dart';
 
 class ProductDetailScreen extends ConsumerStatefulWidget {
   final int productId;
@@ -39,8 +41,8 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                     child: CachedNetworkImage(
                       imageUrl: product.image,
                       fit: BoxFit.contain,
-                      placeholder: (_, __) => const Center(child: CircularProgressIndicator()),
-                      errorWidget: (_, __, ___) => const Icon(Icons.broken_image_outlined, size: 64),
+                      placeholder: (_, _) => const Center(child: CircularProgressIndicator()),
+                      errorWidget: (_, _, _) => const Icon(Icons.broken_image_outlined, size: 64),
                     ),
                   ),
                 ),
@@ -76,15 +78,23 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                     const Spacer(),
                     ElevatedButton.icon(
                       onPressed: () {
-                        // Wired up to the real cart in Step 6.
+                        ref.read(cartProvider.notifier).addProduct(
+                          product,
+                          quantity: quantity,
+                        );
+
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Added $quantity × ${product.title} (cart comes in Step 6)')),
+                          SnackBar(
+                            content: Text(
+                              'Added $quantity × ${product.title} to cart',
+                            ),
+                          ),
                         );
                       },
                       icon: const Icon(Icons.add_shopping_cart),
                       label: const Text('Add to Cart'),
                     ),
-                  ],
+                                      ],
                 ),
               ],
             ),

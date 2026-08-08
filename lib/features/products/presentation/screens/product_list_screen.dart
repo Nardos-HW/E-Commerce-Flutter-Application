@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+
 import '../../../../core/widgets/state_widgets.dart';
 import '../providers/product_providers.dart';
-import 'package:go_router/go_router.dart';
+import '../../../cart/presentation/providers/cart_providers.dart';
+
 
 class ProductListScreen extends ConsumerWidget {
   const ProductListScreen({super.key});
@@ -15,7 +19,25 @@ class ProductListScreen extends ConsumerWidget {
     final selectedCategory = ref.watch(selectedCategoryProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Products')),
+      appBar: AppBar(
+        title: const Text('Products'),
+        actions: [
+          Consumer(
+            builder: (context, ref, _) {
+              final count = ref.watch(cartItemCountProvider);
+
+              return IconButton(
+                onPressed: () => context.push('/cart'),
+                icon: Badge(
+                  label: Text('$count'),
+                  isLabelVisible: count > 0,
+                  child: const Icon(Icons.shopping_cart_outlined),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Padding(
@@ -32,7 +54,7 @@ class ProductListScreen extends ConsumerWidget {
           ),
           categoriesAsync.when(
             loading: () => const SizedBox(height: 40),
-            error: (_, __) => const SizedBox.shrink(), // categories are secondary; don't block the screen on this
+            error: (_, _) => const SizedBox.shrink(), // categories are secondary; don't block the screen on this
             data: (categories) => SizedBox(
               height: 44,
               child: ListView(
@@ -91,9 +113,9 @@ class ProductListScreen extends ConsumerWidget {
                                 child: CachedNetworkImage(
                                   imageUrl: product.image,
                                   fit: BoxFit.contain,
-                                  placeholder: (_, __) =>
+                                  placeholder: (_, _) =>
                                       const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                                  errorWidget: (_, __, ___) =>
+                                  errorWidget: (_, _, _) =>
                                       const Icon(Icons.broken_image_outlined),
                                 ),
                               ),
