@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';  //using the dio package I installed. it gives me the dio class.
+import 'package:flutter/foundation.dart';
 import 'failure.dart';
 import 'result.dart';
 class DioClient {   //a customized dio class. instruction of how to make Dio. 
@@ -18,12 +19,14 @@ class DioClient {   //a customized dio class. instruction of how to make Dio.
 
   )
   {
-    dio.interceptors.add(
-      LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-      ),
-    );
+    if (kDebugMode) {
+      dio.interceptors.add(
+        LogInterceptor(
+          requestBody: true,
+          responseBody: true,
+        ),
+      );
+    }
   }
 
     // Every repository call goes through here instead of calling dio directly.

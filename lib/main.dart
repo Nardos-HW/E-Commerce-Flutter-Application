@@ -5,7 +5,7 @@ import 'core/routing/app_router.dart';
 import 'features/cart/data/cart_item_hive_adapter.dart';
 import 'features/cart/domain/cart_item.dart';
 import 'features/cart/presentation/providers/cart_providers.dart';
-
+import 'core/theme/app_theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -30,6 +30,9 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: 'E-Commerce',
       routerConfig: router,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.system,
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 
 import '../../../../core/widgets/state_widgets.dart';
+import '../../../../core/utils/responsive.dart';
 import '../providers/product_providers.dart';
 import '../../../cart/presentation/providers/cart_providers.dart';
 
@@ -84,7 +85,7 @@ class ProductListScreen extends ConsumerWidget {
           ),
           Expanded(
             child: productsAsync.when(
-              loading: () => const LoadingView(),
+              loading: () => const ProductGridSkeleton(),
               error: (error, _) => ErrorView(
                 message: 'Could not load products.\n${error.toString()}',
                 onRetry: () => ref.read(productListProvider.notifier).refresh(),
@@ -98,7 +99,7 @@ class ProductListScreen extends ConsumerWidget {
                   child: GridView.builder(
                     padding: const EdgeInsets.all(12),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: MediaQuery.of(context).size.width > 700 ? 4 : 2,
+                      crossAxisCount: Responsive.gridColumns(context),
                       childAspectRatio: 0.65,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
@@ -169,6 +170,30 @@ class _CategoryChip extends StatelessWidget {
         label: Text(label),
         selected: selected,
         onSelected: (_) => onTap(),
+      ),
+    );
+  }
+}
+
+class ProductGridSkeleton extends StatelessWidget {
+  const ProductGridSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      padding: const EdgeInsets.all(12),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: Responsive.gridColumns(context),
+        childAspectRatio: 0.65,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+      ),
+      itemCount: 6,
+      itemBuilder: (context, index) => Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(12),
+        ),
       ),
     );
   }
