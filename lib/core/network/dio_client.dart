@@ -7,7 +7,7 @@ class DioClient {   //a customized dio class. instruction of how to make Dio.
 
   DioClient() : dio = Dio(//constructor. whenever someone creates a DioClient, run this code.  what it does is create a Dio() object.
     BaseOptions( //default settings. don't need to write them twice.
-      baseUrl : 'https://fakestoreapi.com',
+      baseUrl : 'https://cors-anywhere.herokuapp.com/https://fakestoreapi.com',
       connectTimeout: const Duration(seconds: 10), //wait 10 seconds for the server
       receiveTimeout: const Duration(seconds: 10), //wait 10 seconds for the data
       headers: {
