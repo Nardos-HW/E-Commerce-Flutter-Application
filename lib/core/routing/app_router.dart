@@ -6,6 +6,7 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/cart/presentation/screens/cart_screen.dart';
 import '../../features/products/presentation/screens/product_detail_screen.dart';
 import '../../features/products/presentation/screens/product_list_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
 
 // Bridges Riverpod state changes into something go_router's redirect can listen to.
 class _AuthRefreshNotifier extends ChangeNotifier {
@@ -44,6 +45,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(path: '/cart', builder: (context, state) => const CartScreen()),
+      GoRoute(path: '/profile', builder: (context, state) => const ProfileScreen()),
     ],
   );
 });

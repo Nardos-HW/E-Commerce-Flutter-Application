@@ -22,6 +22,10 @@ class ProductListScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Products'),
         actions: [
+          IconButton(
+            onPressed: () => context.push('/profile'),
+            icon: const Icon(Icons.person_outline),
+          ),
           Consumer(
             builder: (context, ref, _) {
               final count = ref.watch(cartItemCountProvider);
