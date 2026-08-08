@@ -35,4 +35,12 @@ class ProductRepositoryImpl implements ProductRepository {
           .toList(),
     );
   }
+
+  @override
+  Future<Result<Product>> getProductById(int id) {
+    return dioClient.safeCall<Product>(
+      () => dioClient.dio.get('/products/$id'),
+      (data) => Product.fromJson(data as Map<String, dynamic>),
+    );
+  }
 }

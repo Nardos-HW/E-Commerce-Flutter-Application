@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/widgets/state_widgets.dart';
 import '../providers/product_providers.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductListScreen extends ConsumerWidget {
   const ProductListScreen({super.key});
@@ -81,37 +82,40 @@ class ProductListScreen extends ConsumerWidget {
                       final product = products[index];
                       return Card(
                         clipBehavior: Clip.antiAlias,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: CachedNetworkImage(
-                                imageUrl: product.image,
-                                fit: BoxFit.contain,
-                                placeholder: (_, __) =>
-                                    const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                                errorWidget: (_, __, ___) =>
-                                    const Icon(Icons.broken_image_outlined),
+                        child: InkWell(
+                          onTap: () => context.push('/product/${product.id}'),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: CachedNetworkImage(
+                                  imageUrl: product.image,
+                                  fit: BoxFit.contain,
+                                  placeholder: (_, __) =>
+                                      const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                                  errorWidget: (_, __, ___) =>
+                                      const Icon(Icons.broken_image_outlined),
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product.title,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text('\$${product.price.toStringAsFixed(2)}'),
-                                ],
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      product.title,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontWeight: FontWeight.w600),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text('\$${product.price.toStringAsFixed(2)}'),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        )
                       );
                     },
                   ),

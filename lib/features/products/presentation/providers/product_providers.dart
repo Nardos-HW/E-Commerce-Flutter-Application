@@ -91,3 +91,17 @@ final filteredProductsProvider = Provider<AsyncValue<List<Product>>>((ref) {
     }).toList();
   });
 });
+
+
+// If the product is already in memory from the list screen, use it directly.
+// Only hits the network if navigated to directly (e.g. a deep link).
+final productByIdProvider = FutureProvider.family<Product, int>((ref, id) async {
+  final cached = ref.watch(productListProvider).value; // null if loading/error
+  if (cached != null) {
+    final match = cached.where((p) => p.id == id);
+    if (match.isNotEmpty) return match.first;
+  }
+  final repo = ref.read(productRepositoryProvider);
+  final result = await repo.getProductById(id);
+  return result.fold((f) => throw f, (p) => p);
+});
